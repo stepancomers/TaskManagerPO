@@ -1,0 +1,63 @@
+﻿<Window x:Class="TaskManagerPO.AutorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManagerPO"
+        mc:Ignorable="d"
+           Title="Login" Height="408" Width="620" MinWidth="400" MinHeight="360" FontFamily="Microsoft Sans Serif" VerticalAlignment="Center" HorizontalAlignment="Center" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <DockPanel Margin="0,5,0,3">
+                <Label x:Name="POName" Content="TaskManagerPO" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="12" Foreground="#FF7E7E7E" Margin="0,0,0,2"/>
+                <Label x:Name="POTitle" Content="Autorization" DockPanel.Dock="Right" VerticalAlignment="Bottom" FontFamily="Calibri" FontSize="16" Foreground="#FF47494E"  Margin="0,0,70,2" Width="92" />
+
+            </DockPanel>
+            <Border BorderBrush="#FF6995C2" BorderThickness="0.5"></Border>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <DockPanel Margin="0,50,0,0">
+                <Label x:Name="LabNoteLogin" DockPanel.Dock="Top" Content="Введите логин и пароль." HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="12" Foreground="#FF7E7E7E"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center" Margin="5,15,0,0" >
+                <Label x:Name="UserLogin" DockPanel.Dock="Left" Content="Login:" FontSize="10" Width="65"/>
+                <TextBox x:Name="UserLoginTextBox"  DockPanel.Dock="Left" Height="20" Width="155" FontSize="10" BorderBrush="#FF7E7E7E" Margin="5,0,0,0"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center" Margin="5,15,0,0" >
+                <Label x:Name="UserPassword" DockPanel.Dock="Left" Content="Password:" FontSize="10" Width="65"/>
+                <TextBox x:Name="UserPasswordTextBox"  DockPanel.Dock="Left" Height="20" Width="155" FontSize="10" BorderBrush="#FF7E7E7E" Margin="5,0,0,0"/>
+            </DockPanel>
+            <DockPanel Margin="0,25,40,0"/>
+            <DockPanel HorizontalAlignment="Center" Margin="70,20,0,0">
+                <Button x:Name="LoginButton" DockPanel.Dock="Left" Margin="0,0,5,0" Content="Login" VerticalAlignment="Center" Width="69" FontSize="12" Height="31" Foreground="Black" Background="#FFF7F7F7" Click="Login_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button x:Name="CancelButton" DockPanel.Dock="Left" Margin="40,0,10,0" Content="Cancel" VerticalAlignment="Center" Width="69" FontSize="12" Height="31" Foreground="Black" Background="#FFF7F7F7" Click="CancelButton_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Left" Margin="0,30,0,0">
+                <Button x:Name="AdminLogin" DockPanel.Dock="Left" Margin="40,0,10,0" Content="Admin" Width="75" FontSize="12" Height="31" Foreground="Black" Background="#FFF7F7F7" Click="Admin_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </DockPanel>
+        </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Label x:Name="LabFooter" Content="TaskManager - приложение, разработанное для облегчения управления учебными заданиями"  FontFamily="Microsoft Sans Serif" FontSize="10" Background="#FF6995C2" MaxHeight="20" Foreground="White" HorizontalContentAlignment="Center" VerticalAlignment="Bottom"  />
+        </DockPanel>
+
+    </DockPanel>
+
+</Window>

@@ -1,0 +1,48 @@
+﻿<Window x:Class="TaskManagerPO.Profile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManagerPO"
+        mc:Ignorable="d"
+       Title="Profile" MinHeight="350" MinWidth ="600" Height="350" Width="60" MaxHeight="500" MaxWidth="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <!-- Задаем высоту строк -->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Последняя строка будет занимать оставшееся пространство -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!-- Задаем ширину столбцов -->
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Изображение профиля -->
+        <Image x:Name="ProfileImage" Grid.Row="0" Grid.Column="0" Width="150" Height="150" Margin="0,0,10,0" Stretch="Uniform" HorizontalAlignment="Left"/>
+
+        <!-- Кнопка выбора изображения -->
+        <Button Content="Выбрать изображение" Click="SelectImage_Click" HorizontalAlignment="Right" Width="160" Grid.Row="0" Grid.Column="1" Margin="160,0,0,130" VerticalAlignment="Top"/>
+        <Button Content="Сохранить Изменений" Click="SaveDataUser_Click" HorizontalAlignment="Right" Width="160" Grid.Row="0" Grid.Column="1" Margin="160,30,0,130" VerticalAlignment="Top"/>
+
+        <!-- Кнопка "Отмена" -->
+        <Button Content="Cancel" Click="Cancel_Click" HorizontalAlignment="Right" Width="62" Grid.Row="0" Grid.Column="1" Margin="258,130,0,0" VerticalAlignment="Bottom"/>
+
+        <!-- Текст "ФИО" -->
+        <TextBlock Text="ФИО:" Grid.Row="1" Grid.Column="0" Margin="0,10,0,0"/>
+
+        <!-- Поле для ввода ФИО -->
+        <TextBox x:Name="NameDataTextBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5"/>
+
+        <!-- Текст "Группа / Предмет" -->
+        <TextBlock x:Name="GroupOrLessonTextBox" Text="Группа / Предмет:" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0"/>
+
+        <!-- Поле для ввода группы / предмета -->
+        <TextBox x:Name="GroupOrLessonDataTextBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5"/>
+    </Grid>
+</Window>
