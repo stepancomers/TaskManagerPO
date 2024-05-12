@@ -119,10 +119,8 @@ namespace TaskManagerPO
                         {
                             if (student.StudentUserName == _login && student.StudentPassword == _password)
                             {
-                                MessageBox.Show("12");
                                 student.ImageData = imageBytes;
                                 
-                                MessageBox.Show("21");
                             }
 
                         }
@@ -164,8 +162,7 @@ namespace TaskManagerPO
                     {
                         if (student.StudentUserName == _login && student.StudentPassword == _password)
                         {
-                            string[] fullNameStudentArray = NameDataTextBox.Text.Split(' ');
-                            if (NameDataTextBox.Text.Length >= 0 && fullNameStudentArray.Length == 2)
+                            if (NameDataTextBox.Text.Length >= 0)
                                 student.StudentFullName = NameDataTextBox.Text;
                             else
                                 MessageBox.Show("Введеное ФИО не соответвует формату");

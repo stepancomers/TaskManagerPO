@@ -59,7 +59,7 @@ namespace TaskManagerPO.AddUser
             else
                 errorMessage += "Неверно указан формат ФИО" + '\n';
             string groupTeacher = LessonNameTextBox.Text;
-            if (groupTeacher.Length <= 0)
+            if (groupTeacher.Length >= 0)
                 requirementsGroup = true;
             else
                 errorMessage += "Строка названия предмета не может быть пустой";
