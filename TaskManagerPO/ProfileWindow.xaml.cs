@@ -153,6 +153,7 @@ namespace TaskManagerPO
 
         private void SaveDataUser_Click(object sender, RoutedEventArgs e)
         {
+            bool succes = true;
             using (var dbContext = new MyDBContext())
             {
                 if (_role == "student")
@@ -165,7 +166,10 @@ namespace TaskManagerPO
                             if (NameDataTextBox.Text.Length >= 0)
                                 student.StudentFullName = NameDataTextBox.Text;
                             else
+                            {
+                                succes = false;
                                 MessageBox.Show("Введеное ФИО не соответвует формату");
+                            }
 
                             string pattern = @"^\d[а-я]{1,2}\d$";
                             string groupStudent = GroupOrLessonDataTextBox.Text;
@@ -173,7 +177,11 @@ namespace TaskManagerPO
                             if (isValid)
                                 student.StudentGroup = GroupOrLessonDataTextBox.Text;
                             else
+                            {
+                                succes = false;
                                 MessageBox.Show("Неверно введен формат номера группа");
+                            }
+                               
                         }
                     }
                 }
@@ -189,17 +197,27 @@ namespace TaskManagerPO
                             if (NameDataTextBox.Text.Length >= 0 && fullNameStudentArray.Length == 2)
                                 teacher.TeacherFullName = NameDataTextBox.Text;
                             else
+                            {
+                                succes = false;
                                 MessageBox.Show("Введеное ФИО не соответвует формату");
+                            }
 
                             if (GroupOrLessonDataTextBox.Text != null)
                                 teacher.LessonName = GroupOrLessonDataTextBox.Text;
                             else
+                            {
+                                succes = false;
                                 MessageBox.Show("Поле названия предмета не может быть пустым");
+                            }
                         }
 
                     }
                 }
                 dbContext.SaveChanges();
+                if (succes)
+                {
+                    MessageBox.Show("Данные успешно изменены");
+                }
             }
         }
     }

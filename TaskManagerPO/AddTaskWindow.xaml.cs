@@ -45,10 +45,10 @@ namespace TaskManagerPO
                 errorMessage += "В название меньше 10 символов" + '\n';
 
             string lessonName = LessonNameTextBox.Text;
-            if (lessonName.Length >= 6)
+            if (lessonName.Length >= 0)
                 requirementslessonName = true;
             else
-                errorMessage += "В название предмета меньше 6 символов" + '\n';
+                errorMessage += "Строка названия предмета не должна быть пустой" + '\n';
 
             string DescriptionTask = DescriptionTaskTextBox.Text;
             if (DescriptionTask.Length > 20)
