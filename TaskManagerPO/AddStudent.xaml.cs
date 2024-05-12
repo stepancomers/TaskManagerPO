@@ -44,9 +44,9 @@ namespace TaskManagerPO
                 requirementsPassword = true; 
             else
                 errorMessage += "В логине меньше 6 символов" +'\n';
+
             string fullNameStudent = StudentFullNameTextBox.Text;
-            string[] fullNameStudentArray = fullNameStudent.Split(' ');
-            if (fullNameStudent.Length >= 0 && fullNameStudentArray.Length == 2)
+            if (fullNameStudent.Length >= 0)
                 requirementsFullName = true;
             else
                 errorMessage += "Неверно указан формат ФИО" + '\n';

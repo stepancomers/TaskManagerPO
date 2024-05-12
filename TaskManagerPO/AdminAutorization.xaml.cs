@@ -36,7 +36,7 @@ namespace TaskManagerPO
                 bool adminLoginRequirements = false;
                 string adminPassword = AdminPasswordTextBox.Text;
                 bool adminPasswordRequirements = false;
-                
+
                 bool adminPiCodeRequirements = false;
                 if (adminLogin.Length >= 5)
                     adminLoginRequirements = true;
@@ -55,23 +55,26 @@ namespace TaskManagerPO
                     adminPiCodeRequirements = true;
                 }
                 else
-                        errorString += "Пин код должен состоять из 4 цифр";
-                    if (adminLoginRequirements && adminPasswordRequirements && adminPiCodeRequirements)
+                {
+                    errorString += "Пин код должен состоять из 4 цифр";
+                }
+                if (adminLoginRequirements && adminPasswordRequirements && adminPiCodeRequirements)
+                {
+                    var admins = dbContext.Admins;
+                    foreach (var admin in admins)
                     {
-                        var admins = dbContext.Admins;
-                        foreach (var admin in admins)
+                        if (admin.AdminName == adminLogin && admin.AdminPassword == adminPassword && admin.AdminPinCode == adminPinCode)
                         {
-                            if (admin.AdminName == adminLogin && admin.AdminPassword == adminPassword && admin.AdminPinCode == adminPinCode)
-                            {
-                                success = true;
-                            }
+                            success = true;
                         }
-                        OpenAdminPanel(success);
-
+                        else
+                            MessageBox.Show("Не верно введены данные");
                     }
-                    else
-                        MessageBox.Show(errorString);
-                
+                    OpenAdminPanel(success);
+
+                }
+                else
+                    MessageBox.Show(errorString);
             }
         }
 

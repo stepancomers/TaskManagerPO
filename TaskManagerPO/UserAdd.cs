@@ -43,10 +43,11 @@ namespace TaskManagerPO
                     var newStudent = new Student { StudentUserName = _userLogin, StudentPassword = _UserPassword, StudentFullName = _userFullName, StudentGroup = groupName };
                     dbContext.Students.Add(newStudent);
                     dbContext.SaveChanges();
-                    MessageBox.Show("successfully registered");
+                    MessageBox.Show("Пользователь успешно добавлен");
                 }
+
                 else
-                    MessageBox.Show("admin with this logiin already exists");
+                    MessageBox.Show("Студент с таким логином уже существует");
             }
         }
 
@@ -71,10 +72,10 @@ namespace TaskManagerPO
                     var newTeacher = new Teacher { TeacherUserName = _userLogin, TeacherPassword = _UserPassword, TeacherFullName = _userFullName, LessonName = lessonName };
                     dbContext.Teachers.Add(newTeacher);
                     dbContext.SaveChanges();
-                    MessageBox.Show("successfully registered");
+                    MessageBox.Show("Пользователь успешно добавлен");
                 }
                 else
-                    MessageBox.Show("admin with this logiin already exists");
+                    MessageBox.Show("Преподователь с таким логином уже существует");
             }
         }
 

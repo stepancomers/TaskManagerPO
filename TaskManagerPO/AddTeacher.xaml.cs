@@ -54,8 +54,7 @@ namespace TaskManagerPO.AddUser
             else
                 errorMessage += "В логине меньше 6 символов" + '\n';
             string fullNameTeacher = TeacherFullNameTextBox.Text;
-            string[] fullNameTeacherArray = fullNameTeacher.Split(' ');
-            if (fullNameTeacher.Length >= 0 && fullNameTeacherArray.Length == 2)
+            if (fullNameTeacher.Length >= 0)
                 requirementsFullName = true;
             else
                 errorMessage += "Неверно указан формат ФИО" + '\n';
@@ -64,6 +63,7 @@ namespace TaskManagerPO.AddUser
                 requirementsGroup = true;
             else
                 errorMessage += "Строка названия предмета не может быть пустой";
+
             if (requirementsLogin && requirementsPassword && requirementsFullName && requirementsGroup)
             {
                 UserAdd userAdd = new UserAdd(TeacherLogin, TeacherPassword, fullNameTeacher);
