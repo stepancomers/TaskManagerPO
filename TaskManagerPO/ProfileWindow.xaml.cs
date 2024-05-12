@@ -4,6 +4,7 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace TaskManagerPO
 {
@@ -23,6 +24,7 @@ namespace TaskManagerPO
             _password = password;
             TextBoxData();
             PhotoProfile();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
         
         string _fullName;
@@ -30,6 +32,7 @@ namespace TaskManagerPO
         string _role;
         string _login;
         string _password;
+        
         void TextBoxData()
         {
             NameDataTextBox.Text = _fullName;
@@ -161,8 +164,19 @@ namespace TaskManagerPO
                     {
                         if (student.StudentUserName == _login && student.StudentPassword == _password)
                         {
-                            student.StudentFullName = NameDataTextBox.Text;
-                            student.StudentGroup = GroupOrLessonDataTextBox.Text;
+                            string[] fullNameStudentArray = NameDataTextBox.Text.Split(' ');
+                            if (NameDataTextBox.Text.Length >= 0 && fullNameStudentArray.Length == 2)
+                                student.StudentFullName = NameDataTextBox.Text;
+                            else
+                                MessageBox.Show("Введеное ФИО не соответвует формату");
+
+                            string pattern = @"^\d[а-я]{1,2}\d$";
+                            string groupStudent = GroupOrLessonDataTextBox.Text;
+                            bool isValid = Regex.IsMatch(groupStudent, pattern);
+                            if (isValid)
+                                student.StudentGroup = GroupOrLessonDataTextBox.Text;
+                            else
+                                MessageBox.Show("Неверно введен формат номера группа");
                         }
                     }
                 }
@@ -174,8 +188,16 @@ namespace TaskManagerPO
                     {
                         if (teacher.TeacherUserName == _login && teacher.TeacherPassword == _password)
                         {
-                            teacher.TeacherFullName = NameDataTextBox.Text;
-                            teacher.LessonName = GroupOrLessonDataTextBox.Text;
+                            string[] fullNameStudentArray = NameDataTextBox.Text.Split(' ');
+                            if (NameDataTextBox.Text.Length >= 0 && fullNameStudentArray.Length == 2)
+                                teacher.TeacherFullName = NameDataTextBox.Text;
+                            else
+                                MessageBox.Show("Введеное ФИО не соответвует формату");
+
+                            if (GroupOrLessonDataTextBox.Text != null)
+                                teacher.LessonName = GroupOrLessonDataTextBox.Text;
+                            else
+                                MessageBox.Show("Поле названия предмета не может быть пустым");
                         }
 
                     }

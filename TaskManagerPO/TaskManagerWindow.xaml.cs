@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace TaskManagerPO
 {
@@ -22,7 +24,7 @@ namespace TaskManagerPO
         public TaskManagerWindow()
         {
             InitializeComponent();
-            
+
         }
 
         string _role;
@@ -31,6 +33,18 @@ namespace TaskManagerPO
         string _lessonNameOrGroup;
         string _taskDescription;
         bool _succes = false;
+
+        void RoleInfoInWindow()
+        {
+            if (_role == "teacher")
+            {
+                RoleInfo.Text = "teacher";
+            }
+            else if (_role == "student")
+            {
+                RoleInfo.Text = "student";
+            }
+        }
 
         public void User(string login, string password)
         {
@@ -49,6 +63,7 @@ namespace TaskManagerPO
                 }
             }
             AddTask();
+            RoleInfoInWindow();
         }
 
         public void Profile_Click(object sender, RoutedEventArgs e)
@@ -90,13 +105,13 @@ namespace TaskManagerPO
                 Close();
 
             }
+
             else
-                MessageBox.Show("Dont logged in account");
+                MessageBox.Show("Аккаунт не зарегестрирован");
         }
 
         private void Autorization_Click(object sender, RoutedEventArgs e)
         {
-            // Создание и отображение второго окна
             AutorizationWindow autorizationWindow = new AutorizationWindow();
             autorizationWindow.Show();
             Close();
@@ -112,20 +127,23 @@ namespace TaskManagerPO
                     var teachers = dbContext.Teachers;
                     foreach (var teacher in teachers)
                     {
-                       
+
                         if (_password == teacher.TeacherPassword && _login == teacher.TeacherUserName)
                             _lessonNameOrGroup = teacher.LessonName;
                     }
+
                     var tasks = dbContext.Tasks;
                     foreach (var task in tasks)
                     {
-                        if(task.LessonName == _lessonNameOrGroup)
+                        if (task.LessonName == _lessonNameOrGroup)
+                        {
                             TasksListBox.Items.Add(task.Name);
+                        }
                     }
                 }
             }
 
-            else if( _role == "student")
+            else if (_role == "student")
             {
                 using (var dbContext = new MyDBContext())
                 {
@@ -134,15 +152,19 @@ namespace TaskManagerPO
                     {
                         if (_password == student.StudentPassword && _login == student.StudentUserName)
                             _lessonNameOrGroup = student.StudentGroup;
+
                     }
 
                     var tasks = dbContext.Tasks;
                     foreach (var task in tasks)
                     {
                         if (task.Group == _lessonNameOrGroup)
+                        {
                             TasksListBox.Items.Add(task.Name);
+                        }
                     }
                 }
+
             }
         }
 
@@ -151,23 +173,25 @@ namespace TaskManagerPO
             object selectedItem = TasksListBox.SelectedItem;
             if (selectedItem != null)
             {
-                // Доступ к содержимому выбранного элемента
                 string content = selectedItem.ToString();
-                MessageBox.Show("Выбран элемент: " + content);
-                // Проверка, что selectedItem не равен null и представляет строку
                 if (selectedItem != null && selectedItem is string)
                 {
-                    // Получение ListBoxItem, представляющего выбранный элемент
                     ListBoxItem selectedListBoxItem = TasksListBox.ItemContainerGenerator.ContainerFromItem(selectedItem) as ListBoxItem;
-
-                    // Проверка, что ListBoxItem найден
                     if (selectedListBoxItem != null)
                     {
-                        // Установка цвета текста
-                        selectedListBoxItem.Foreground = Brushes.Green; // Замените Brushes.Green на нужный вам цвет
+                        selectedListBoxItem.Foreground = Brushes.Green;
+                        using (var dbContext = new MyDBContext())
+                        {
+                            var tasks = dbContext.Tasks;
+                            foreach (var task in tasks)
+                            {
+                                if (task.Name == content)
+                                    task.IsReady = true;
+                            }
+                            dbContext.SaveChanges();
+                        }
                     }
                 }
-
             }
         }
 
@@ -188,26 +212,88 @@ namespace TaskManagerPO
         private void TasksListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             object selectedItem = TasksListBox.SelectedItem;
-            string taskName = selectedItem.ToString();
-            int taskID = 0;
-            using (var dbContext = new MyDBContext())
+            if (selectedItem != null)
             {
-                var tasks = dbContext.Tasks;
-                foreach (var task in tasks)
+                string taskName = selectedItem.ToString();
+                int taskID = 0;
+                using (var dbContext = new MyDBContext())
                 {
-                    if(task.Name == taskName)
+                    var tasks = dbContext.Tasks;
+                    foreach (var task in tasks)
                     {
-                        taskID = task.TaskID;
+                        if (task.Name == taskName)
+                        {
+                            taskID = task.TaskID;
+                            string ready;
+                            if (task.IsReady)
+                                ready = "Выполнено";
+                            else
+                                ready = "Не выполнено";
+                            TaskInfo.Text = "Дата создания: " + task.DateAddTask + "\n" + "Название прдемета: " + task.LessonName + "\n" + "Номер группы: " + task.Group + "\n" + ready;
+                        }
+                    }
+                    var taskDescriptions = dbContext.TaskDescriptions;
+                    foreach (var taskDescription in taskDescriptions)
+                    {
+                        if (taskDescription.TaskId == taskID)
+                        {
+                            TackDescription.Text = taskDescription.Description;
+                        }
                     }
                 }
-                var taskDescriptions = dbContext.TaskDescriptions;
-                foreach (var taskDescription in taskDescriptions)
+            }
+        }
+
+        private void DeleteTaskButtoon_Click(object sender, RoutedEventArgs e)
+        {
+            if (_role == "teacher")
+            {
+                object selectedItem = TasksListBox.SelectedItem;
+                if (selectedItem != null)
                 {
-                    if(taskDescription.TaskId == taskID)
+                    string content = selectedItem.ToString();
+                    using (var dbContext = new MyDBContext())
                     {
-                        TackDescription.Text = taskDescription.Description;
+                        dbContext.Database.CreateIfNotExists();
+                        var tasks = dbContext.Tasks;
+                        bool recuringName = false;
+                        int taskIDToDelete = 0;
+                        foreach (var task in tasks)
+                        {
+                            if (task.Name == content && task.IsReady == true)
+                            {
+                                var itemToDelete = dbContext.Tasks.Find(task.TaskID);
+                                taskIDToDelete = task.TaskID;
+                                dbContext.Tasks.Remove(itemToDelete);
+                                TasksListBox.Items.Remove(selectedItem);
+
+                                // Сохраняем изменения в базе данных
+
+                            }
+                        }
+
+                        if (taskIDToDelete >= 0)
+                        {
+                            var taskDescriptions = dbContext.TaskDescriptions;
+                            foreach (var taskDescription in taskDescriptions)
+                            {
+                                if (taskDescription.TaskId == taskIDToDelete)
+                                {
+                                    var taskDescriptionToDelete = dbContext.TaskDescriptions.Find(taskDescription.TaskId);
+                                    dbContext.TaskDescriptions.Remove(taskDescriptionToDelete);
+                                }
+                            }
+                        }
+                        else
+                            MessageBox.Show("Задача не выполнена" + '\n' + "Удаление не возможно");
+                        dbContext.SaveChanges();
                     }
                 }
+            }
+
+            else
+            {
+                MessageBox.Show("Недостаточно прав");
             }
         }
     }

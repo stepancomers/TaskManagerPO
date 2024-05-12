@@ -29,11 +29,21 @@ namespace TaskManagerPO
             {
                 dbContext.Database.CreateIfNotExists();
                 var tasks = dbContext.Tasks;
-
-                var newTask = new Task { Name = _name, DateAddTask = DateTime.Now, LessonName = _lessonName, Group = _group, IsReady = false };
-                dbContext.Tasks.Add(newTask);
-                dbContext.SaveChanges();
-                _taskID = newTask.TaskID;
+                bool recuringName = false;
+                foreach (var task in tasks)
+                {
+                    if (task.Name == _name)
+                        recuringName = true;
+                }
+                if (!recuringName)
+                {
+                    var newTask = new Task { Name = _name, DateAddTask = DateTime.Now, LessonName = _lessonName, Group = _group, IsReady = false };
+                    dbContext.Tasks.Add(newTask);
+                    dbContext.SaveChanges();
+                    _taskID = newTask.TaskID;
+                }
+                else
+                    MessageBox.Show("Одиннаковые имена у заданий не могут сущствовать");
             }
         }
 

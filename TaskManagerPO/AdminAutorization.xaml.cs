@@ -23,25 +23,55 @@ namespace TaskManagerPO
         public AdminAutorization()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void AdminLogin_Click(object sender, RoutedEventArgs e)
         {
             using (var dbContext = new MyDBContext())
             {
+                string errorString = null;
                 bool success = false;
                 string adminLogin = AdminLoginTextBox.Text;
+                bool adminLoginRequirements = false;
                 string adminPassword = AdminPasswordTextBox.Text;
-                int adminPinCode = Convert.ToInt32(AdminCodeTextBox.Text);
-                var admins = dbContext.Admins;
-                foreach (var admin in admins)
+                bool adminPasswordRequirements = false;
+                
+                bool adminPiCodeRequirements = false;
+                if (adminLogin.Length >= 5)
+                    adminLoginRequirements = true;
+                else
+                    errorString += "Логин содержит менее 5 символов" + '\n';
+
+                if (adminPassword.Length >= 5)
+                    adminPasswordRequirements = true;
+                else
+                    errorString += "Пароль короче 5 символов" + '\n';
+
+                int adminPinCode = 0;
+                if (AdminCodeTextBox.Text.Length == 4)
                 {
-                    if (admin.AdminName == adminLogin && admin.AdminPassword == adminPassword && admin.AdminPinCode == adminPinCode)
-                    {
-                        success = true;
-                    }
+                    adminPinCode = Convert.ToInt32(AdminCodeTextBox.Text);
+                    adminPiCodeRequirements = true;
                 }
-                OpenAdminPanel(success);
+                else
+                        errorString += "Пин код должен состоять из 4 цифр";
+                    if (adminLoginRequirements && adminPasswordRequirements && adminPiCodeRequirements)
+                    {
+                        var admins = dbContext.Admins;
+                        foreach (var admin in admins)
+                        {
+                            if (admin.AdminName == adminLogin && admin.AdminPassword == adminPassword && admin.AdminPinCode == adminPinCode)
+                            {
+                                success = true;
+                            }
+                        }
+                        OpenAdminPanel(success);
+
+                    }
+                    else
+                        MessageBox.Show(errorString);
+                
             }
         }
 
@@ -69,27 +99,54 @@ namespace TaskManagerPO
             {
                 dbContext.Database.CreateIfNotExists();
                 var admins = dbContext.Admins;
+                string errorString = null;
                 string adminLogin = AdminLoginTextBox.Text;
+                bool adminLoginRequirements = false;
                 string adminPassword = AdminPasswordTextBox.Text;
-                int adminPinCode = Convert.ToInt32(AdminCodeTextBox.Text);
+                bool adminPasswordRequirements = false;
 
-                foreach (var admin in admins)
-                {
-                    if (admin.AdminName == adminLogin)
-                    {
-                        recurringData = true;
-                    }
-                }
+                bool adminPiCodeRequirements = false;
+                if (adminLogin.Length >= 5)
+                    adminLoginRequirements = true;
+                else
+                    errorString += "Логин содержит менее 5 символов" + '\n';
 
-                if (!recurringData)
+                if (adminPassword.Length >= 5)
+                    adminPasswordRequirements = true;
+                else
+                    errorString += "Пароль короче 5 символов" + '\n';
+
+                int adminPinCode = 0;
+                if (AdminCodeTextBox.Text.Length == 4)
                 {
-                    var newAdmin = new Admin { AdminName = adminLogin, AdminPassword = adminPassword, AdminPinCode = adminPinCode};
-                    dbContext.Admins.Add(newAdmin);
-                    dbContext.SaveChanges();
-                    MessageBox.Show("successfully registered");
+                    adminPinCode = Convert.ToInt32(AdminCodeTextBox.Text);
+                    adminPiCodeRequirements = true;
                 }
                 else
-                    MessageBox.Show("admin with this logiin already exists");
+                    errorString += "Пин код должен состоять из 4 цифр";
+
+                if (adminLoginRequirements && adminPasswordRequirements && adminPiCodeRequirements)
+                {
+                    foreach (var admin in admins)
+                    {
+                        if (admin.AdminName == adminLogin)
+                        {
+                            recurringData = true;
+                        }
+                    }
+
+                    if (!recurringData)
+                    {
+                        var newAdmin = new Admin { AdminName = adminLogin, AdminPassword = adminPassword, AdminPinCode = adminPinCode };
+                        dbContext.Admins.Add(newAdmin);
+                        dbContext.SaveChanges();
+                        MessageBox.Show("Регистраиця прошла успешна");
+                    }
+                    else
+                        MessageBox.Show("Админ с таким логином уже существует");
+                }
+                else
+                    MessageBox.Show(errorString);
             }
         }
 

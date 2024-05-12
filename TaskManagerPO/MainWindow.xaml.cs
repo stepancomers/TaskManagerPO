@@ -1,5 +1,8 @@
-﻿using System.Windows;
-
+﻿using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System;
 namespace TaskManagerPO
 {
     /// <summary>
@@ -15,6 +18,7 @@ namespace TaskManagerPO
         public MainWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AutorizationWindowOpen();
         }
 

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace TaskManagerPO
 {
@@ -22,18 +23,54 @@ namespace TaskManagerPO
         public AdminAddUsers()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void AddStudent_Click(object sender, RoutedEventArgs e)
         {
-            string studentLogin = StudentLoginTextBox.Text;
-            string studentPassword = StudentPasswordTextBox.Text;
-            string fullNameStudent = StudentFullNameTextBox.Text;
-            string groupStudent = StudentGroupTextBox.Text;
+            bool requirementsLogin = false;
+            bool requirementsPassword = false;
+            bool requirementsFullName = false;
+            bool requirementsGroup = false;
 
-            UserAdd userAdd = new UserAdd(studentLogin, studentPassword, fullNameStudent);
-            userAdd.AddStudentDB(groupStudent);
-            userAdd.AddUserDB();
+            string errorMessage = null;
+            string studentLogin = StudentLoginTextBox.Text;
+            if (studentLogin.Length >= 8)
+                requirementsLogin = true;
+            else
+                errorMessage += "В логине меньше 8 символов" + '\n';
+            string studentPassword = StudentPasswordTextBox.Text;
+            if(studentPassword.Length >= 6)
+                requirementsPassword = true; 
+            else
+                errorMessage += "В логине меньше 6 символов" +'\n';
+            string fullNameStudent = StudentFullNameTextBox.Text;
+            string[] fullNameStudentArray = fullNameStudent.Split(' ');
+            if (fullNameStudent.Length >= 0 && fullNameStudentArray.Length == 2)
+                requirementsFullName = true;
+            else
+                errorMessage += "Неверно указан формат ФИО" + '\n';
+            string pattern = @"^\d[а-я]{1,2}\d$";
+            string groupStudent = StudentGroupTextBox.Text;
+            bool isValid = Regex.IsMatch(groupStudent, pattern);
+            if (isValid)
+                requirementsGroup = true;
+            else
+                errorMessage += "Неверно указан формат номера группы.";
+            if (requirementsLogin && requirementsPassword && requirementsFullName && requirementsGroup)
+            {
+                UserAdd userAdd = new UserAdd(studentLogin, studentPassword, fullNameStudent);
+                userAdd.AddStudentDB(groupStudent);
+                userAdd.AddUserDB();
+                StudentLoginTextBox.Text = null;
+                StudentPasswordTextBox.Text = null;
+                StudentFullNameTextBox.Text = null;
+                StudentGroupTextBox.Text = null;
+            }
+            else
+            {
+                MessageBox.Show(errorMessage);
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

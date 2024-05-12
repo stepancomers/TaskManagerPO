@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerPO.AddUser"
         mc:Ignorable="d"
-        Title="Выберите роль" Height="150" Width="250">
+        Title="Выберите роль" Height="150" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button Content="StudentAdd" Click="StudentAdd_Click" HorizontalAlignment="Left" Margin="10,48,0,-88" Grid.Row="1" Width="84"/>
-        <Button Content="TeacherAdd" Click="TeacherAdd_Click" Grid.Row="1" HorizontalAlignment="Left" Margin="156,48,0,-88" Width="74"/>
+        <Button Content="StudentAdd" Click="StudentAdd_Click" HorizontalAlignment="Left" Margin="20,10,0,-84" Grid.Row="0" Width="110" Grid.RowSpan="2"/>
+        <Button Content="TeacherAdd" Click="TeacherAdd_Click" HorizontalAlignment="Left" Margin="170,10,0,-84" Grid.Row="1" Width="110"/>
     </Grid>
 </Window>

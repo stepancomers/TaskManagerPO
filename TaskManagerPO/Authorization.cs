@@ -40,7 +40,7 @@ namespace TaskManagerPO
                 }
                 if (!Succes)
                 {
-                    MessageBox.Show("User not found");
+                    MessageBox.Show("Пользователь не найден");
                 }
             }
         }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerPO"
         mc:Ignorable="d"
-            Title="AddTask" Height="350" Width="400">
+            Title="AddTask" Height="350" Width="420">
     <StackPanel DockPanel.Dock="Top">
         <DockPanel Margin="0,5,0,0">
             <Label x:Name="LabNoteLogin" DockPanel.Dock="Top" Content="Введите название для задачи" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="12" Foreground="#FF7E7E7E"/>

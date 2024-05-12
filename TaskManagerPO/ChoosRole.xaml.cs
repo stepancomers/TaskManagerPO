@@ -22,6 +22,7 @@ namespace TaskManagerPO.AddUser
         public ChoosRole()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void StudentAdd_Click(object sender, RoutedEventArgs e)
